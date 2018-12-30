@@ -48,11 +48,10 @@ def send_message(self, text):
     chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
     url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(
         token=token, chat_id=chat_id, text=text)
-    requests.get(url) \
- \
-    @ persistent
+    requests.get(url)
 
 
+@ persistent
 def send_message_start(self):
     print('START')
     text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
@@ -72,6 +71,7 @@ def send_message_end(self):
     send_message(self, text)
 
 
+# addon pref
 class BlenderRenderNotifierAddonPrefs(bpy.types.AddonPreferences):
     bl_idname = __name__
     telegram_token = bpy.props.StringProperty(name="Token", maxlen=45,
@@ -79,7 +79,6 @@ class BlenderRenderNotifierAddonPrefs(bpy.types.AddonPreferences):
     telegram_user = bpy.props.StringProperty(name="User ID", get=get_user_id,
                                              set=set_user_id)
 
-    # here you specify how they are drawn
     def draw(self, context):
         layout = self.layout
         layout.prop(self, "telegram_token")
