@@ -12,5 +12,6 @@ Telegram notifies user about render status.
 
 ## Todo
 
-* send image thumbnail
+* update manual
+* send render image thumbnail
 * set frame interval
