@@ -14,7 +14,6 @@ from datetime import datetime
 import requests
 from bpy.app.handlers import persistent
 
-
 sys.path.append(os.path.dirname(__file__))
 URL = "https://api.telegram.org/bot{token}/"
 
@@ -34,33 +33,57 @@ def get_user_id(self):
 def set_user_id(self, value):
     self['telegram_user'] = value
 
-    
-bpy.types.Scene.telegram_token = bpy.props.StringProperty(name="Token", maxlen=45, get=get_token, set=set_token)
-bpy.types.Scene.telegram_user = bpy.props.StringProperty(name="User ID", get=get_user_id, set=set_user_id)
+
+bpy.types.Scene.telegram_token = bpy.props.StringProperty(name="Token",
+                                                          maxlen=45,
+                                                          get=get_token,
+                                                          set=set_token)
+bpy.types.Scene.telegram_user = bpy.props.StringProperty(name="User ID",
+                                                         get=get_user_id,
+                                                         set=set_user_id)
 
 
 def send_message(self, text):
+    token = bpy.context.user_preferences.addons[__name__].preferences.telegram_token
+    chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
     url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(
-        token= bpy.context.scene.telegram_token, chat_id=bpy.context.scene.telegram_user, text=text)
-    requests.get(url)
+        token=token, chat_id=chat_id, text=text)
+    requests.get(url) \
+ \
+    @ persistent
 
-@persistent
+
 def send_message_start(self):
     print('START')
     text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
-                         name=bpy.context.scene.name,
-                         frame=bpy.context.scene.frame_current,
-                         time=datetime.now().strftime("%H:%M:%S %Z"))
+        name=bpy.context.scene.name,
+        frame=bpy.context.scene.frame_current,
+        time=datetime.now().strftime("%H:%M:%S %Z"))
     send_message(self, text)
+
 
 @persistent
 def send_message_end(self):
     print('END')
     text = "FINISH RENDER:\nscene: {name}\nframe: {frame}\nends at: {time}".format(
-                         name=bpy.context.scene.name,
-                         frame=bpy.context.scene.frame_current,
-                         time=datetime.now().strftime("%H:%M:%S %Z"))
+        name=bpy.context.scene.name,
+        frame=bpy.context.scene.frame_current,
+        time=datetime.now().strftime("%H:%M:%S %Z"))
     send_message(self, text)
+
+
+class BlenderRenderNotifierAddonPrefs(bpy.types.AddonPreferences):
+    bl_idname = __name__
+    telegram_token = bpy.props.StringProperty(name="Token", maxlen=45,
+                                              get=get_token, set=set_token)
+    telegram_user = bpy.props.StringProperty(name="User ID", get=get_user_id,
+                                             set=set_user_id)
+
+    # here you specify how they are drawn
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "telegram_token")
+        layout.prop(self, "telegram_user")
 
 
 #  interface
@@ -74,9 +97,11 @@ class NotifierPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         row = layout.row(align=True)
-        row.prop(context.scene, 'telegram_token')
+        row.prop(context.user_preferences.addons[__name__].preferences,
+                 'telegram_token')
         row = layout.row(align=True)
-        row.prop(context.scene, 'telegram_user')
+        row.prop(context.user_preferences.addons[__name__].preferences,
+                 'telegram_user')
 
 
 #  registration
