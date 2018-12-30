@@ -22,7 +22,7 @@ bpy.types.Scene.telegram_token = bpy.props.StringProperty(name="Token", maxlen=4
 bpy.types.Scene.telegram_user = bpy.props.StringProperty(name="User ID")
 
 
-def send_message(text):
+def send_message(self, text):
     url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(
         token= bpy.context.scene.telegram_token, chat_id=bpy.context.scene.telegram_user, text=text)
     requests.get(url)
@@ -34,7 +34,7 @@ def send_message_start(self):
                          name=bpy.context.scene.name,
                          frame=bpy.context.scene.frame_current,
                          time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(text)
+    send_message(self, text)
 
 
 def send_message_end(self):
@@ -43,10 +43,10 @@ def send_message_end(self):
                          name=bpy.context.scene.name,
                          frame=bpy.context.scene.frame_current,
                          time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(text)
+    send_message(self, text)
 
 
-# interface
+#  interface
 class NotifierPanel(bpy.types.Panel):
     bl_label = "Blender Render Notifier"
     bl_idname = "SCENE_PT_layout"
@@ -62,7 +62,7 @@ class NotifierPanel(bpy.types.Panel):
         row.prop(context.scene, 'telegram_user')
 
 
-# registration
+#  registration
 def register():
     bpy.utils.register_module(__name__)
     bpy.app.handlers.render_pre.append(send_message_start)
@@ -73,6 +73,7 @@ def unregister():
     bpy.app.handlers.render_pre.remove(send_message_start)
     bpy.app.handlers.render_post.remove(send_message_end)
     bpy.utils.unregister_module(__name__)
+
 
 if __name__ == "__main__":
     register()
