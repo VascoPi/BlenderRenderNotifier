@@ -45,9 +45,10 @@ def send_message_end(self):
                          time=datetime.now().strftime("%H:%M:%S %Z"))
     send_message(text)
 
+
 # interface
 class NotifierPanel(bpy.types.Panel):
-    bl_label = "Render Notifier"
+    bl_label = "Blender Render Notifier"
     bl_idname = "SCENE_PT_layout"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
