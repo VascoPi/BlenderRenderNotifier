@@ -4,8 +4,8 @@ bl_info = {
     "version": (0, 0, 1),
     "blender": (2, 7, 9),
     "description": "Telegram notifies user about render status.",
-    "location": "View 3D > Tool Shelf > Animation/Sniper",
-    "warning": "Currently only Linux/Unix supported (using 'notify-send')",
+    "location": "Rendertab -> Render Panel",
+    "warning": "Currently only testing",
     "category": "Render"
 }
 
