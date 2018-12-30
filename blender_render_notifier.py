@@ -5,7 +5,7 @@ bl_info = {
     "blender": (2, 7, 9),
     "description": "Telegram notifies user about render status.",
     "location": "Rendertab -> Render Panel",
-    "warning": "Currently only testing",
+    "warning": "Testing, WIP",
     "category": "Render"
 }
 
