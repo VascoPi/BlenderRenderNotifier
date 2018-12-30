@@ -27,9 +27,6 @@ def set_token(self, value):
     self['telegram_token'] = value
 
 
-bpy.types.Scene.telegram_token = bpy.props.StringProperty(name="Token", maxlen=45, get=get_token, set=set_token)
-
-
 def get_user_id(self):
     return self['telegram_user']
 
@@ -37,7 +34,8 @@ def get_user_id(self):
 def set_user_id(self, value):
     self['telegram_user'] = value
 
-
+    
+bpy.types.Scene.telegram_token = bpy.props.StringProperty(name="Token", maxlen=45, get=get_token, set=set_token)
 bpy.types.Scene.telegram_user = bpy.props.StringProperty(name="User ID", get=get_user_id, set=set_user_id)
 
 
