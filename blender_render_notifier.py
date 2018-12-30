@@ -28,9 +28,6 @@ def send_message(text):
     requests.get(url)
 
 
-
-
-# interface
 def send_message_start(self):
     print('START')
     text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
@@ -38,7 +35,6 @@ def send_message_start(self):
                          frame=bpy.context.scene.frame_current,
                          time=datetime.now().strftime("%H:%M:%S %Z"))
     send_message(text)
-
 
 
 def send_message_end(self):
@@ -49,8 +45,7 @@ def send_message_end(self):
                          time=datetime.now().strftime("%H:%M:%S %Z"))
     send_message(text)
 
-
-
+# interface
 class NotifierPanel(bpy.types.Panel):
     bl_label = "Render Notifier"
     bl_idname = "SCENE_PT_layout"
@@ -67,7 +62,6 @@ class NotifierPanel(bpy.types.Panel):
 
 
 # registration
-
 def register():
     bpy.utils.register_module(__name__)
     bpy.app.handlers.render_pre.append(send_message_start)
