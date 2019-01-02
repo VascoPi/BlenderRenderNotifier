@@ -1,6 +1,20 @@
 # BlenderRenderNotifier
 
-Addon for Blender 2.79 (WIP)
+## Manual
+
+#### Download
+
+* Download [BlenderRenderNotifier](https://github.com/VascoPi/BlenderRenderNotifier) from my github repository.
+* Stable release can be found in the [link](https://github.com/VascoPi/BlenderRenderNotifier/releases).
+* Nightly release can be downloaded from the [master](https://github.com/VascoPi/BlenderRenderNotifier/archive/master.zip), only basic functionality is tested working.
+
+#### Install
+
+In preferences window choose Addon tab and press "Install Add-on from File...". Choose "blender_render_notifier.py".
+It'll apper in Testing/Render category, enable it and set preferences.
+After installation, you can find the the add-on at Properties section on Render tab.
+
+#### Usage
 
 Telegram notifies user about render status.
 All you need, is to create Telegram Bot with [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot). You will get Token. Then get your User_id via [userinfobot](https://telegram.me/userinfobot) (just send message and you receive your info).
