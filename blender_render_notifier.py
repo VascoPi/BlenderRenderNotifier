@@ -20,34 +20,6 @@ sys.path.append(os.path.dirname(__file__))
 URL = "https://api.telegram.org/bot{token}/"
 
 
-def send_message(self, text):
-    token = bpy.context.user_preferences.addons[__name__].preferences.telegram_token
-    chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
-    if all([token, chat_id]):
-        url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=text)
-        requests.get(url)
-    else:
-        pass
-
-
-@persistent
-def send_message_start(self):
-    text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
-        name=bpy.context.scene.name,
-        frame=bpy.context.scene.frame_current,
-        time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(self, text)
-
-
-@persistent
-def send_message_end(self):
-    text = "FINISH RENDER:\nscene: {name}\nframe: {frame}\nends at: {time}".format(
-        name=bpy.context.scene.name,
-        frame=bpy.context.scene.frame_current,
-        time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(self, text)
-
-
 # addon pref
 class BlenderRenderNotifierAddonPrefs(bpy.types.AddonPreferences):
     bl_idname = __name__
@@ -76,6 +48,35 @@ class NotifierPanel(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(context.user_preferences.addons[__name__].preferences,
                  'telegram_user')
+
+
+def send_message(self, text):
+    token = bpy.context.user_preferences.addons[__name__].preferences.telegram_token
+    chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
+    if all([token, chat_id]):
+        url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=text)
+        try:
+            requests.get(url)
+        except:
+            pass
+
+
+@persistent
+def send_message_start(self):
+    text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
+        name=bpy.context.scene.name,
+        frame=bpy.context.scene.frame_current,
+        time=datetime.now().strftime("%H:%M:%S %Z"))
+    send_message(self, text)
+
+
+@persistent
+def send_message_end(self):
+    text = "FINISH RENDER:\nscene: {name}\nframe: {frame}\nends at: {time}".format(
+        name=bpy.context.scene.name,
+        frame=bpy.context.scene.frame_current,
+        time=datetime.now().strftime("%H:%M:%S %Z"))
+    send_message(self, text)
 
 
 #  registration
