@@ -101,7 +101,6 @@ def send_message_end(self):
 #  registration
 classes = (NP_PT_panel, BlenderRenderNotifierAddonPrefs)
 
-
 def register():
     from bpy.utils import register_class
     for cls in classes:
