@@ -1,2 +1,3 @@
-## v0.0.1
-* Release
+## v0.1.0
+#### Features
+* added initial functionality
