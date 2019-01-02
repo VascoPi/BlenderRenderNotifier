@@ -5,6 +5,8 @@ bl_info = {
     "blender": (2, 7, 9),
     "description": "Telegram notifies user about render status.",
     "location": "Rendertab -> Render Panel",
+    "wiki_url": "https://github.com/VascoPi/BlenderRenderNotifier/blob/master/README.md",
+    "support": "TESTING",
     "warning": "Testing, WIP",
     "category": "Render"
 }
