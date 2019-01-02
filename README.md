@@ -20,6 +20,10 @@ Telegram notifies user about render status.
 All you need, is to create Telegram Bot with [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot). You will get Token. Then get your User_id via [userinfobot](https://telegram.me/userinfobot) (just send message and you receive your info).
 Paste your Token and User_id into addon preferences.
 
+
+![](https://github.com/VascoPi/BlenderRenderNotifier/raw/master/help/Usage.gif)
+
+
 ![](https://github.com/VascoPi/BlenderRenderNotifier/raw/master/help/Addon_preferences.jpg)
 
 
