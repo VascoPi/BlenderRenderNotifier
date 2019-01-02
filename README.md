@@ -4,9 +4,9 @@
 
 #### Download
 
-* Download [BlenderRenderNotifier](https://github.com/VascoPi/BlenderRenderNotifier) from my github repository.
+* Download [BlenderRenderNotifier for Blender 2.79](https://github.com/VascoPi/BlenderRenderNotifier/tree/master) or [BlenderRenderNotifier for Blender 2.80](https://github.com/VascoPi/BlenderRenderNotifier/tree/2.80) from my github repository.
 * Stable release can be found in the [link](https://github.com/VascoPi/BlenderRenderNotifier/releases).
-* Nightly release can be downloaded from the [master](https://github.com/VascoPi/BlenderRenderNotifier/archive/master.zip), only basic functionality is tested working.
+* Nightly release can be downloaded from the [master for Blender 2.79](https://github.com/VascoPi/BlenderRenderNotifier/archive/master.zip) or [brunch for Blender 2.80](https://github.com/VascoPi/BlenderRenderNotifier/archive/2.80.zip), only basic functionality is tested working.
 
 #### Install
 
