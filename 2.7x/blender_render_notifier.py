@@ -41,6 +41,7 @@ URL = "https://api.telegram.org/bot{token}/"
 # addon pref
 class BlenderRenderNotifierAddonPrefs(bpy.types.AddonPreferences):
     bl_idname = __name__
+    telegram_toggle = bpy.props.BoolProperty(default=True)
     telegram_token = bpy.props.StringProperty(name="Token", maxlen=45)
     telegram_user = bpy.props.StringProperty(name="User ID")
 
@@ -58,6 +59,10 @@ class NotifierPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = "render"
 
+    def draw_header(self, context):
+        layout = self.layout
+        layout.prop(context.user_preferences.addons[__name__].preferences, "telegram_toggle", text="")
+
     def draw(self, context):
         layout = self.layout
         row = layout.row(align=True)
@@ -71,7 +76,8 @@ class NotifierPanel(bpy.types.Panel):
 def send_message(self, text):
     token = bpy.context.user_preferences.addons[__name__].preferences.telegram_token
     chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
-    if all([token, chat_id]):
+    state = bpy.context.user_preferences.addons[__name__].preferences.telegram_toggle
+    if all([token, chat_id, state]):
         url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=text)
         try:
             requests.get(url)
