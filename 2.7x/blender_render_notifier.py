@@ -59,6 +59,10 @@ class NotifierPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = "render"
 
+    start_time = datetime.now()
+    status = "START RENDER FRAME"
+    text = "{}:\nfile: {}\nscene: {}\nframe: {}/{}  ({})\ntimestamp: {}\nduration: {}"
+
     def draw_header(self, context):
         layout = self.layout
         layout.prop(context.user_preferences.addons[__name__].preferences, "telegram_toggle", text="")
@@ -72,13 +76,35 @@ class NotifierPanel(bpy.types.Panel):
         row.prop(context.user_preferences.addons[__name__].preferences,
                  'telegram_user')
 
+    @classmethod
+    def get_info(cls):
+        status = cls.status
+        file = "Not saved" if not bpy.data.filepath else bpy.data.filepath.split("\\")[-1]
+        scene = bpy.context.scene.name
+        frame = bpy.context.scene.frame_current
+        frame_start = bpy.context.scene.frame_start
+        frame_end = bpy.context.scene.frame_end
+        timestamp = datetime.now()
+        if cls.status != "START RENDER FRAME":
+            duration = str(timestamp - cls.start_time).split('.')[0]
+        else:
+            duration = '---'
+        return status, file, scene, frame, frame_end, frame_start, timestamp.strftime("%H:%M:%S"), duration
 
-def send_message(self, text):
+    @classmethod
+    def set_info(cls, status):
+        cls.status = status
+        if status == "START RENDER FRAME":
+            cls.start_time = datetime.now()
+
+
+def send_message(self):
     token = bpy.context.user_preferences.addons[__name__].preferences.telegram_token
     chat_id = bpy.context.user_preferences.addons[__name__].preferences.telegram_user
     state = bpy.context.user_preferences.addons[__name__].preferences.telegram_toggle
+    message_text = NotifierPanel.text.format(*NotifierPanel.get_info())
     if all([token, chat_id, state]):
-        url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=text)
+        url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=message_text)
         try:
             requests.get(url)
         except:
@@ -87,20 +113,20 @@ def send_message(self, text):
 
 @persistent
 def send_message_start(self):
-    text = "START RENDER:\nscene: {name}\nframe: {frame}\nstarts at: {time}".format(
-        name=bpy.context.scene.name,
-        frame=bpy.context.scene.frame_current,
-        time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(self, text)
+    NotifierPanel.set_info("START RENDER FRAME")
+    send_message(self)
 
 
 @persistent
 def send_message_end(self):
-    text = "FINISH RENDER:\nscene: {name}\nframe: {frame}\nends at: {time}".format(
-        name=bpy.context.scene.name,
-        frame=bpy.context.scene.frame_current,
-        time=datetime.now().strftime("%H:%M:%S %Z"))
-    send_message(self, text)
+    NotifierPanel.set_info("COMPLETE RENDER FRAME")
+    send_message(self)
+
+
+@persistent
+def send_message_cancel(self):
+    NotifierPanel.set_info("CANCEL RENDER")
+    send_message(self)
 
 
 #  registration
@@ -108,11 +134,13 @@ def register():
     bpy.utils.register_module(__name__)
     bpy.app.handlers.render_pre.append(send_message_start)
     bpy.app.handlers.render_post.append(send_message_end)
+    bpy.app.handlers.render_cancel.append(send_message_cancel)
 
 
 def unregister():
     bpy.app.handlers.render_pre.remove(send_message_start)
     bpy.app.handlers.render_post.remove(send_message_end)
+    bpy.app.handlers.render_cancel.remove(send_message_cancel)
     bpy.utils.unregister_module(__name__)
 
 
