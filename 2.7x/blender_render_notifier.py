@@ -84,18 +84,31 @@ class NotifierPanel(bpy.types.Panel):
         frame = bpy.context.scene.frame_current
         frame_start = bpy.context.scene.frame_start
         frame_end = bpy.context.scene.frame_end
+        frame_count = frame_end - frame_start
         timestamp = datetime.now()
         if cls.status != "START RENDER FRAME":
             duration = str(timestamp - cls.start_time).split('.')[0]
         else:
             duration = '---'
-        return status, file, scene, frame, frame_end, frame_start, timestamp.strftime("%H:%M:%S"), duration
+        return status, file, scene, frame, frame_end, frame_count, timestamp.strftime("%H:%M:%S"), duration
 
     @classmethod
     def set_info(cls, status):
         cls.status = status
         if status == "START RENDER FRAME":
             cls.start_time = datetime.now()
+
+
+def send_photo(self):
+    URL = "https://api.telegram.org/bot{token}/sendPhoto"
+    files = {'photo': bpy.data.images['Viewer Node'].pixels.as_bytes()}
+    data = {'chat_id': str(chat_id)}
+    if all([token, chat_id, state]):
+        url = (URL + 'sendmessage?chat_id={chat_id}&text={text}').format(token=token, chat_id=chat_id, text=message_text)
+        try:
+            requests.post(url, files=files, data=data)
+        except:
+            pass
 
 
 def send_message(self):
@@ -121,6 +134,10 @@ def send_message_start(self):
 def send_message_end(self):
     NotifierPanel.set_info("COMPLETE RENDER FRAME")
     send_message(self)
+    try:
+        send_photo(self)
+    except:
+        pass
 
 
 @persistent

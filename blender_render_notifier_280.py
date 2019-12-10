@@ -84,12 +84,13 @@ class NP_PT_panel(bpy.types.Panel):
         frame = bpy.context.scene.frame_current
         frame_start = bpy.context.scene.frame_start
         frame_end = bpy.context.scene.frame_end
+        frame_count = frame_end - frame_start
         timestamp = datetime.now()
         if cls.status != "START RENDER FRAME":
             duration = str(timestamp - cls.start_time).split('.')[0]
         else:
             duration = '---'
-        return status, file, scene, frame, frame_end, frame_start, timestamp.strftime("%H:%M:%S"), duration
+        return status, file, scene, frame, frame_end, frame_count, timestamp.strftime("%H:%M:%S"), duration
 
     @classmethod
     def set_info(cls, status):
