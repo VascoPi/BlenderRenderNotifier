@@ -46,13 +46,11 @@ class BLRN_Preferences(bpy.types.AddonPreferences):
         layout.prop(self, "user")
 
 
-classes = (
+register_classes, unregister_classes = bpy.utils.register_classes_factory([
     BLRN_Bot_properties,
     BLRN_PT_panel,
     BLRN_Preferences,
-)
-
-register_classes, unregister_classes = bpy.utils.register_classes_factory(classes)
+])
 
 
 def register():

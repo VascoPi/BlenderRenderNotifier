@@ -68,18 +68,6 @@ class Telagram_Bot:
 
         requests.get(f"https://api.telegram.org/bot{token}/sendmessage?chat_id={chat_id}&text={message}")
 
-    @classmethod
-    def register(cls):
-        bpy.app.handlers.render_pre.append(cls.render_pre)
-        bpy.app.handlers.render_post.append(cls.render_post)
-        bpy.app.handlers.render_cancel.append(cls.render_cancel)
-
-    @classmethod
-    def unregister(cls):
-        bpy.app.handlers.render_pre.remove(cls.render_pre)
-        bpy.app.handlers.render_post.remove(cls.render_post)
-        bpy.app.handlers.render_cancel.remove(cls.render_cancel)
-
     @bpy.app.handlers.persistent
     def render_pre(self, *args, **kwargs):
         Telagram_Bot._send_message(Bot_Status.START, *args, **kwargs)
@@ -91,6 +79,18 @@ class Telagram_Bot:
     @bpy.app.handlers.persistent
     def render_cancel(self, *args, **kwargs):
         Telagram_Bot._send_message(Bot_Status.CANCEL, *args, **kwargs)
+
+    @classmethod
+    def register(cls):
+        bpy.app.handlers.render_pre.append(cls.render_pre)
+        bpy.app.handlers.render_post.append(cls.render_post)
+        bpy.app.handlers.render_cancel.append(cls.render_cancel)
+
+    @classmethod
+    def unregister(cls):
+        bpy.app.handlers.render_pre.remove(cls.render_pre)
+        bpy.app.handlers.render_post.remove(cls.render_post)
+        bpy.app.handlers.render_cancel.remove(cls.render_cancel)
 
 
 bot = Telagram_Bot()
