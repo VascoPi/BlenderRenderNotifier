@@ -36,7 +36,6 @@ bl_info = {
 
 class BLRN_Preferences(bpy.types.AddonPreferences):
     bl_idname = __package__
-    print(bl_idname)
 
     token: bpy.props.StringProperty(name="Token", maxlen=45)
     user: bpy.props.StringProperty(name="User ID")

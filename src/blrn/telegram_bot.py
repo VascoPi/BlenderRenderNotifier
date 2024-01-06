@@ -34,8 +34,16 @@ class Telagram_Bot:
     start_time = None
 
     @classmethod
-    def _generate_message(cls, status: Bot_Status):
+    def _send_message(cls, status, *args, **kwargs):
         blrn_props = bpy.context.window_manager.blrn
+        if not blrn_props.enable_notification:
+            return
+
+        prefs = get_preferences()
+        token = prefs.token
+        chat_id = prefs.user
+        if not all([token, chat_id]):
+            return
 
         message = f"{status.value}\n"
         if blrn_props.enable_file and bpy.data.filepath:
@@ -58,28 +66,7 @@ class Telagram_Bot:
             message += str(datetime.now() - cls.start_time).split('.')[0]
             cls.start_time = None
 
-        return message
-
-    @classmethod
-    def _send_message(cls, status, *args, **kwargs):
-        if not bpy.context.window_manager.blrn.enable_notification:
-            return
-
-        prefs = get_preferences()
-        token = prefs.token
-        chat_id = prefs.user
-        if not all([token, chat_id]):
-            return
-
-        try:
-            url = (f"https://api.telegram.org/bot{token}/"
-                   f"sendmessage?chat_id={chat_id}&"
-                   f"text={cls._generate_message(status)}")
-
-            requests.get(url)
-
-        except Exception as err:
-            print(f"SEND MESSAGE: {err}")
+        requests.get(f"https://api.telegram.org/bot{token}/sendmessage?chat_id={chat_id}&text={message}")
 
     @classmethod
     def register(cls):
