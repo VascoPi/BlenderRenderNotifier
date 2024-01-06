@@ -27,10 +27,6 @@ Paste your Token and User_id into addon preferences.
 ![](https://github.com/VascoPi/BlenderRenderNotifier/raw/master/help/Addon_preferences.jpg)
 
 
-Aslo you can change them later.
-
-![](https://github.com/VascoPi/BlenderRenderNotifier/raw/master/help/Addon_settings.jpg)
-
 That's it! Next time you render, will get render info message from your bot.
 
 Message example.
@@ -48,4 +44,3 @@ Message example.
 
 * update manual
 * send render image thumbnail
-* set frame interval
