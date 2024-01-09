@@ -15,11 +15,13 @@
 #  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # ##### END GPL LICENSE BLOCK #####
-import bpy
 
-from .properties import BLRN_Bot_properties
-from .ui import BLRN_PT_panel
-from .telegram_bot import bot
+from . import (
+    properties,
+    preferences,
+    telegram_bot,
+    ui,
+)
 
 
 bl_info = {
@@ -34,33 +36,18 @@ bl_info = {
 }
 
 
-class BLRN_Preferences(bpy.types.AddonPreferences):
-    bl_idname = __package__
-
-    token: bpy.props.StringProperty(name="Token", maxlen=45)
-    user: bpy.props.StringProperty(name="User ID")
-
-    def draw(self, context):
-        layout = self.layout
-        layout.prop(self, "token")
-        layout.prop(self, "user")
-
-
-register_classes, unregister_classes = bpy.utils.register_classes_factory([
-    BLRN_Bot_properties,
-    BLRN_PT_panel,
-    BLRN_Preferences,
-])
-
-
 def register():
-    register_classes()
-    bot.register()
+    properties.register()
+    preferences.register()
+    telegram_bot.register()
+    ui.register()
 
 
 def unregister():
-    bot.unregister()
-    unregister_classes()
+    ui.unregister()
+    telegram_bot.unregister()
+    preferences.unregister()
+    properties.unregister()
 
 
 if __name__ == "__main__":

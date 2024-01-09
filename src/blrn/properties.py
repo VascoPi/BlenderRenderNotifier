@@ -44,3 +44,8 @@ class BLRN_Bot_properties(bpy.types.PropertyGroup):
     @classmethod
     def register(cls):
         bpy.types.WindowManager.blrn = bpy.props.PointerProperty(name="Blender Render Notifier Properties", type=cls)
+
+
+register, unregister = bpy.utils.register_classes_factory([
+    BLRN_Bot_properties,
+])

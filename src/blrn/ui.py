@@ -36,8 +36,18 @@ class BLRN_PT_panel(bpy.types.Panel):
 
         col = layout.column()
         col.enabled = blrn_props.enable_notification
+        from .telegram_bot import bot
+
+        if not bot.is_active():
+            box = col.box()
+            box.label(text=bot.connection_status(), icon='ERROR')
 
         col.prop(blrn_props, "enable_result")
         col.prop(blrn_props, "enable_frame")
         col.prop(blrn_props, "enable_scene")
         col.prop(blrn_props, "enable_file")
+
+
+register, unregister = bpy.utils.register_classes_factory([
+    BLRN_PT_panel,
+])
